@@ -51,26 +51,26 @@
         <div class="card-columns-vertical mt-1">
         <h5 class="">Exam results</h5>
             <!--HINT Display exam results-->
-            	LOOP ON QUESTIONS
+            	{% for question in course.question_set.all %}
                 <div class="card mt-1">
-                    <div class="card-header"><h5>QUESTION DETAILS</h5></div>
+                    <div class="card-header"><h5>{{question.content}}</h5></div>
                     <div class="form-group">
-                        LOOP ON CHOICES
+                        {% for choice in question.choice_set.all %}
                         <div class="form-check">
-                            IF CHOICE IS CORRECT AND CHOSEN
-                            <div class="text-success">Correct answer: CHOICE DETAILS</div>
-                            ELSE IF CHOICE IS CORRECT AND NOT CHOSEN
-                            <div class="text-warning">Not selected: CHOICE DETAILS</div>
-                            ELSE IF CHOICE IS NOT CORRECT AND CHOSEN
-                            <div class="text-danger">Wrong answer: CHOICE DETAILS</div>
-                            ELSE
-                            <div>CHOICE DETAILS</div>
-                            END ALL IFs
+                            {% if choice.is_correct and choice in choices %}
+                            <div class="text-success">Correct answer: {{choice.content}}</div>
+                            {% elif choice.is_correct and not choice in choices %}
+                            <div class="text-warning">Not selected: {{choice.content}}</div>
+                            {% elif not choice.is_correct and choice in choices %}
+                            <div class="text-danger">Wrong answer: {{choice.content}}</div>
+                            {% else %}
+                            <div>{{choice.content}}</div>
+                            {% endif %}
                         </div>
-                        END INNER LOOP
+                        {% endfor %}
                     </div>
                 </div>
-                END LOOP
+                {% endfor %}
         </div>
     </div>
 </body>
